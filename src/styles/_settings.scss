@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.app-container {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+// .app-container {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     width: 90%;
+//     max-width: 1340px;
+//     margin: auto;
+// }
+
+.main {
+    flex: 1;
+    margin: 0 auto;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+}
+
+footer {
+    background-color: beige;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

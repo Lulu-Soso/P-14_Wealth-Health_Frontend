@@ -1,9 +1,18 @@
-import React from 'react'
+import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <div className="app-container">
+      <Header />
+      <main className="main">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
-export default App
+export default App;

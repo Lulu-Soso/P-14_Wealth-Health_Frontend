@@ -1,0 +1,22 @@
+header {
+    background-color: beige;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1340Px;
+        width: 80%;
+        margin: 0 auto;
+
+        .main-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 3rem;
+            font-size: 1rem;
+        }
+    }
+}
