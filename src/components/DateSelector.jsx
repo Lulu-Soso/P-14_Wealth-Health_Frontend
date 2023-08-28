@@ -2,7 +2,7 @@ import React from "react";
 
 const DateSelector = ({ label, value, onChange }) => {
   return (
-    <div>
+    <div className="field">
       <label htmlFor={label.toLowerCase()}>{label}</label>
       <input
         type="date"

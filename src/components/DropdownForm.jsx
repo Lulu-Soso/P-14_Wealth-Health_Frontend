@@ -2,7 +2,7 @@ import React from "react";
 
 const DropdownForm = ({ label, options, value, onChange }) => {
   return (
-    <div>
+    <div className="field">
       <label htmlFor="{label.toLowerCase()}">{label}</label>
       <select
         id={label.toLowerCase()}

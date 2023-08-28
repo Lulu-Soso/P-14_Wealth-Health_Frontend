@@ -13,13 +13,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
 import EmployeesListPage from "./pages/EmployeesListPage";
-import CreateEmployeesPage from "./pages/CreateEmployeesPage"
+import CreateEmployeePage from "./pages/CreateEmployeePage"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomePage />} />
-      <Route path="/employees/create" element={<CreateEmployeesPage />} />
+      <Route path="/employees/create" element={<CreateEmployeePage />} />
       <Route path="/employees/list" element={<EmployeesListPage />} />
     </Route>
   )

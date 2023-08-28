@@ -11,21 +11,11 @@
     min-height: 100vh;
 }
 
-// .app-container {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     width: 90%;
-//     max-width: 1340px;
-//     margin: auto;
-// }
-
 .main {
     flex: 1;
     margin: 0 auto;
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
+    max-width: 1340px;
+    width: 100%;
 }
 
 footer {
