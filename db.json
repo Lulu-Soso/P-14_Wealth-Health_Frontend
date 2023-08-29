@@ -35,6 +35,54 @@
       "state": "Texas",
       "zipCode": "67890",
       "department": "Engineering"
+    },
+    {
+      "firstName": "Lucas",
+      "lastName": "PREA",
+      "birthDate": "2023-08-11",
+      "startDate": "2023-08-12",
+      "street": "10 Lotissement les Allors",
+      "city": "Bas-en-Basset",
+      "state": "CA",
+      "zipCode": "43210",
+      "department": "Engineering",
+      "id": 4
+    },
+    {
+      "firstName": "David",
+      "lastName": "Ravel",
+      "birthDate": "2023-08-02",
+      "startDate": "2023-08-05",
+      "street": "rue des bois",
+      "city": "allemagne",
+      "state": "CA",
+      "zipCode": "4",
+      "department": "Engineering",
+      "id": 5
+    },
+    {
+      "firstName": "Lucas",
+      "lastName": "PREA",
+      "birthDate": "",
+      "startDate": "",
+      "street": "10 Lotissement les Allors",
+      "city": "Bas-en-Basset",
+      "state": "CA",
+      "zipCode": "43210",
+      "department": "Marketing",
+      "id": 6
+    },
+    {
+      "firstName": "Sophie ",
+      "lastName": "Marceau",
+      "birthDate": "2023-08-03",
+      "startDate": "2023-08-04",
+      "street": "regner",
+      "city": "bloise",
+      "state": "CA",
+      "zipCode": "54788",
+      "department": "Marketing",
+      "id": 7
     }
   ]
 }
