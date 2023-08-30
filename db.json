@@ -83,6 +83,18 @@
       "zipCode": "54788",
       "department": "Marketing",
       "id": 7
+    },
+    {
+      "firstName": "Elon ",
+      "lastName": "Musk",
+      "birthDate": "2023-08-01",
+      "startDate": "2023-08-05",
+      "street": "wall street",
+      "city": "new york",
+      "state": "CA",
+      "zipCode": "4",
+      "department": "Engineering",
+      "id": 8
     }
   ]
 }

@@ -7,6 +7,7 @@ const initialState = {
   employeeInfo: localStorage.getItem('employeeInfo')
   ? JSON.parse(localStorage.getItem('employeeInfo'))
   : null,
+  error: null,
 };
 
 const employeesSlice = createSlice({
@@ -24,8 +25,11 @@ const employeesSlice = createSlice({
       localStorage.setItem("employeeInfo", JSON.stringify(payload));
       localStorage.setItem("employees", JSON.stringify(state.employees));
     },
+    setError: (state, { payload }) => {
+      state.error = payload;
+    },
   },
 });
 
-export const { setEmployeesData, addEmployee } = employeesSlice.actions;
+export const { setEmployeesData, addEmployee, setError } = employeesSlice.actions;
 export default employeesSlice.reducer;

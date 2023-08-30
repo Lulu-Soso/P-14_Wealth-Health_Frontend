@@ -1,74 +1,95 @@
-.table-row-odd {
-  background-color: #dcdcdc;
-}
-
-.table-row-even {
-  background-color: #ffffff;
-}
-
-/* Ajoutez ceci à votre fichier CSS */
-.sorted-column {
-  position: relative;
-}
-
-.sorted-column::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #ffff99; /* Couleur de fond jaune pour l'en-tête de colonne triée */
-  filter: saturate(0.3); /* Réglez la saturation selon vos préférences */
-  mix-blend-mode: multiply; /* Applique l'effet de mélange pour l'overlay */
-  pointer-events: none; /* Évite d'interférer avec les interactions de la colonne en-tête */
-  z-index: 1; /* Placez-le en arrière de la colonne en-tête */
-}
-
-.flex-jcc-aic {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 1.2rem;
-}
-
-.up-down {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 1.5rem;
-  margin-left: 0.5rem;
-  color: rgb(208, 208, 208);
-}
-
-.employees-tbody {
-  border: 5px solid grey;
-  background-color: green;
-}
-
 .employees-header {
   display: flex;
   align-items: center;
   flex-direction: column;
   padding-top: 3rem;
+
+  .show-search {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.2rem 0;
+
+    .filter {
+      display: flex;
+    }
+  }
 }
 
-.flex-jcsb {
+table {
+  border-collapse: collapse; /* Pour fusionner les bordures */
+  width: 100%;
+
+  th,
+  td {
+    border: none;
+    padding: 8px;
+    text-align: left;
+
+    .up-down {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 1.5rem;
+      margin-left: 0.5rem;
+      color: rgb(208, 208, 208);
+
+      .sorted-icon {
+        color: #5a6f08;
+      }
+    }
+  }
+
+  th:hover {
+    background-color: #93ad18;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  tbody {
+    border-top: 1px solid #d6d6d6;
+    border-bottom: 1px solid #d6d6d6;
+  }
+
+  .table-row-odd {
+    background-color: #d7ddbb;
+  }
+
+  .table-row-even {
+    background-color: #ffffff;
+  }
+
+  .sorted-column {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffff99;
+      filter: saturate(0.3);
+      mix-blend-mode: multiply; /* Applique l'effet de mélange pour l'overlay */
+      pointer-events: none; /* Évite d'interférer avec les interactions de la colonne en-tête */
+      z-index: 1;
+    }
+  }
+}
+
+.flex-pagination {
   display: flex;
   justify-content: space-between;
   width: 100%;
   padding: 1.2rem 0;
-}
 
-.filter {
-  display: flex;
-}
-
-.number-page {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
 }
 
 .link-employee {
