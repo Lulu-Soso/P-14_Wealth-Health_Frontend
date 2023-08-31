@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setEmployeesData, setError } from "../feature/employees.slice";
+import {
+  setEmployeesData,
+  setError,
+  setSearch,
+} from "../feature/employees.slice";
 import { FaCaretUp, FaCaretDown } from "react-icons/fa6";
 
 const EmployeesListPage = () => {
@@ -51,6 +55,91 @@ const EmployeesListPage = () => {
     fetchData();
   }, [dispatch]);
 
+  const [entriesToShow, setEntriesToShow] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+
+  const totalEntries = sortedData.length;
+  const totalPages = Math.ceil(totalEntries / entriesToShow);
+
+  const paginatedData = sortedData
+    .filter((employee) => {
+      if (!searchValue) return true;
+      return (
+        employee.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.birthDate.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.startDate.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.street.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.city.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.state.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.zipCode.toLowerCase().includes(searchValue.toLowerCase()) ||
+        employee.department.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    })
+    .slice((currentPage - 1) * entriesToShow, currentPage * entriesToShow);
+
+  const handleSearchChange = (e) => {
+    setSearchValue(e.target.value);
+    setCurrentPage(1); // Reset to page 1 on search
+    dispatch(setSearch(e.target.value));
+  };
+
+  const handleEntriesChange = (e) => {
+    setEntriesToShow(+e.target.value);
+    setCurrentPage(1); // Reset to page 1 on entries change
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  const pageNumbers = getPageNumbers(totalPages, currentPage);
+
+  function getPageNumbers(totalPages, currentPage, pagesToShow = 5) {
+    const halfWay = Math.ceil(pagesToShow / 2);
+
+    // Déterminer les limites de départ et de fin pour la pagination
+    let startPage = currentPage - halfWay + 1;
+    let endPage = currentPage + halfWay - 1;
+
+    // Si startPage est négatif ou zéro
+    if (startPage <= 0) {
+      endPage -= startPage - 1;
+      startPage = 1;
+    }
+
+    // Si endPage dépasse totalPages
+    if (endPage > totalPages) {
+      endPage = totalPages;
+    }
+
+    // Si après avoir fixé endPage, startPage est toujours négatif ou zéro
+    if (endPage - pagesToShow + 1 > 0) {
+      startPage = endPage - pagesToShow + 1;
+    }
+
+    // Générer les numéros de page
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    // Ajouter la première et la dernière page si elles ne sont pas déjà présentes
+    if (startPage !== 1) pages.unshift(1);
+    if (endPage !== totalPages && totalPages !== 1) pages.push(totalPages);
+
+    return pages;
+  }
+
   return (
     <div className="app-container">
       <div className="employees-header">
@@ -61,25 +150,29 @@ const EmployeesListPage = () => {
             <select
               name="state"
               id="show"
-              // value={state}
-              // onChange={(e) => setState(e.target.value)}
+              value={entriesToShow}
+              onChange={handleEntriesChange}
             >
-              <option value="">10</option>
-              <option value="">25</option>
-              <option value="">50</option>
-              <option value="">100</option>
-              {/* Ajoutez d'autres options d'état ici */}
+              <option value="10">10</option> {/* Corrected values */}
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </select>
             <p>entries</p>
           </div>
-          <div>
+          <div className="search">
             <label htmlFor="search">Search:</label>
-            <input id="search" type="text" />
+            <input
+              id="search"
+              type="text"
+              value={searchValue}
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
       </div>
 
-      <table>
+      <table className="employees-table">
         <thead>
           <tr>
             <th
@@ -106,7 +199,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("lastName")} className={`${sortBy === "lastName" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("lastName")}
+              className={`${sortBy === "lastName" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Last Name
                 <span className="up-down">
@@ -127,7 +223,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("birthDate")} className={`${sortBy === "birthDate" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("birthDate")}
+              className={`${sortBy === "birthDate" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Date of Birth
                 <span className="up-down">
@@ -148,7 +247,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("startDate")} className={`${sortBy === "startDate" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("startDate")}
+              className={`${sortBy === "startDate" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Start Date
                 <span className="up-down">
@@ -169,7 +271,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("street")} className={`${sortBy === "street" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("street")}
+              className={`${sortBy === "street" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Street
                 <span className="up-down">
@@ -190,7 +295,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("city")} className={`${sortBy === "city" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("city")}
+              className={`${sortBy === "city" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 City
                 <span className="up-down">
@@ -211,7 +319,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("state")} className={`${sortBy === "state" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("state")}
+              className={`${sortBy === "state" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 State
                 <span className="up-down">
@@ -232,7 +343,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("zipCode")} className={`${sortBy === "zipCode" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("zipCode")}
+              className={`${sortBy === "zipCode" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Zip Code
                 <span className="up-down">
@@ -253,7 +367,10 @@ const EmployeesListPage = () => {
                 </span>
               </p>
             </th>
-            <th onClick={() => handleColumnClick("department")} className={`${sortBy === "department" ? "sorted-column" : ""}`}>
+            <th
+              onClick={() => handleColumnClick("department")}
+              className={`${sortBy === "department" ? "sorted-column" : ""}`}
+            >
               <p className="flex-jcc-aic">
                 Department
                 <span className="up-down">
@@ -277,8 +394,7 @@ const EmployeesListPage = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {employeesData?.map((employee, index) => ( */}
-          {sortedData?.map((employee, index) => (
+          {paginatedData?.map((employee, index) => (
             <tr
               key={employee.id}
               className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
@@ -315,11 +431,34 @@ const EmployeesListPage = () => {
         </tbody>
       </table>
       <div className="flex-pagination">
-        <div>Showing 1 to 9 of 9 entries</div>
+        <div>
+          Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
+          {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+          {totalEntries} entries
+        </div>
+
         <div className="pagination">
-          <p>Previous</p>
-          <p>1</p>
-          <p>Next</p>
+          <button className="previous-next" onClick={handlePreviousPage}>
+            Previous
+          </button>
+
+          {pageNumbers.map((number, index) => (
+            <React.Fragment key={number}>
+              {index > 0 && pageNumbers[index - 1] !== number - 1 && (
+                <span>...</span>
+              )}
+              <button
+                className={number === currentPage ? "current-page" : ""}
+                onClick={() => handlePageClick(number)}
+              >
+                {number}
+              </button>
+            </React.Fragment>
+          ))}
+
+          <button className="previous-next" onClick={handleNextPage}>
+            Next
+          </button>
         </div>
       </div>
       <div className="link-employee">

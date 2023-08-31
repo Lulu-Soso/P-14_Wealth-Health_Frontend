@@ -12,11 +12,24 @@
 
     .filter {
       display: flex;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+
+    .search {
+      display: flex;
+      gap: 0.5rem;
+      font-weight: 600;
+      width: 20%;
+
+      input {
+        width: 100%;
+      }
     }
   }
 }
 
-table {
+.employees-table {
   border-collapse: collapse; /* Pour fusionner les bordures */
   width: 100%;
 
@@ -25,6 +38,13 @@ table {
     border: none;
     padding: 8px;
     text-align: left;
+
+    .flex-jcc-aic {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
 
     .up-down {
       display: flex;
@@ -45,6 +65,7 @@ table {
     background-color: #93ad18;
     color: #ffffff;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
 
   tbody {
@@ -87,8 +108,39 @@ table {
 
   .pagination {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    button {
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border: none;
+      background-color: #d7ddbb;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #93ad18;
+        color: #ffffff;
+      }
+    }
+
+    button.current-page {
+      font-weight: bold;
+      background-color: #5a6f08;
+      color: white;
+
+      &:hover {
+        background-color: #93ad18;
+        border-color: #93ad18;
+      }
+    }
+
+    .previous-next {
+      background-color: #5a6f08;
+      color: #ffffff;
+    }
   }
 }
 
@@ -96,4 +148,16 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  a {
+    background-color: #5a6f08;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-decoration: none;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #93ad18;
+    }
+  }
 }

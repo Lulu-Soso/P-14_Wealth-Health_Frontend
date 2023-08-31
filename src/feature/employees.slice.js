@@ -4,10 +4,16 @@ const initialState = {
   employees: localStorage.getItem("employees")
     ? JSON.parse(localStorage.getItem("employees"))
     : [],
-  employeeInfo: localStorage.getItem('employeeInfo')
-  ? JSON.parse(localStorage.getItem('employeeInfo'))
-  : null,
+  employeeInfo: localStorage.getItem("employeeInfo")
+    ? JSON.parse(localStorage.getItem("employeeInfo"))
+    : null,
   error: null,
+  filteredResults: [],
+  searchValue: "",
+  pagination: {
+    currentPage: 1,
+    entriesToShow: 10,
+  },
 };
 
 const employeesSlice = createSlice({
@@ -28,8 +34,24 @@ const employeesSlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
     },
+    setEntriesToShow: (state, { payload }) => {
+      state.pagination.entriesToShow = payload;
+    },
+    setSearch: (state, { payload }) => {
+      state.searchValue = payload;
+    },
+    setCurrentPage: (state, { payload }) => {
+      state.pagination.currentPage = payload;
+    },
   },
 });
 
-export const { setEmployeesData, addEmployee, setError } = employeesSlice.actions;
+export const {
+  setEmployeesData,
+  addEmployee,
+  setError,
+  setCurrentPage,
+  setEntriesToShow,
+  setSearch,
+} = employeesSlice.actions;
 export default employeesSlice.reducer;
