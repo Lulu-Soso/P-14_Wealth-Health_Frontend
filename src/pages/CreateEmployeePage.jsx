@@ -17,6 +17,8 @@ const CreateEmployeePage = () => {
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [department, setDepartment] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationTimer, setConfirmationTimer] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -37,11 +39,14 @@ const CreateEmployeePage = () => {
 
     try {
       console.log("Sending request with data:", data);
-      const response = await axios.post("http://localhost:5000/employees", data);
+      const response = await axios.post(
+        "http://localhost:5000/employees",
+        data
+      );
       console.log("Response:", response.data);
       dispatch(addEmployee(response.data));
 
-      setFirstName("");   
+      setFirstName("");
       setLastName("");
       setBirthDate("");
       setStartDate("");
@@ -51,9 +56,24 @@ const CreateEmployeePage = () => {
       setZipCode("");
       setDepartment("");
       // Affichez la fenêtre modale de confirmation ici si nécessaire
+
+      setShowConfirmation(true); // Affichez la fenêtre modale de confirmation
     } catch (error) {
       console.error("Error creating employee:", error);
     }
+  };
+
+  const handleConfirmation = () => {
+    setShowConfirmation(true); // Affiche la fenêtre modale
+    clearTimeout(confirmationTimer); // Supprime le minuteur précédent
+    const timer = setTimeout(() => {
+      setShowConfirmation(false); // Ferme la fenêtre modale après un certain temps
+    }, 3000); // 3000 millisecondes (3 secondes)
+    setConfirmationTimer(timer); // Stocke le nouveau minuteur
+  };
+
+  const closeConfirmation = () => {
+    setShowConfirmation(false); // Ferme la fenêtre modale
   };
 
   const departmentOptions = [
@@ -66,16 +86,12 @@ const CreateEmployeePage = () => {
 
   return (
     <div className="create-employee">
-      <div className="title">
+      {/* <div className="title">
         <h1>HRnet</h1>
       </div>
-      {/* <div className="form-container"> */}
-      <Link to="/employees/list">View Current Employees</Link>
+      <Link to="/employees/list">View Current Employees</Link> */}
       <h2>Create Employee</h2>
-      <form
-        className="form-container"
-        onSubmit={(e) => handleSubmit(e)}
-      >
+      <form className="form-container" onSubmit={(e) => handleSubmit(e)}>
         <div className="field-row">
           <div className="field">
             <label htmlFor="first-name">First Name</label>
@@ -145,16 +161,15 @@ const CreateEmployeePage = () => {
                   {/* Ajoutez d'autres options d'état ici */}
                 </select>
               </div>
-              <div>
-                <div className="field">
-                  <label htmlFor="zip-code">Zip Code</label>
-                  <input
-                    id="zip-code"
-                    type="number"
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                  />
-                </div>
+              <div className="field">
+                <label htmlFor="zip-code">Zip Code</label>
+                <input
+                  className="zip-code"
+                  id="zip-code"
+                  type="number"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                />
               </div>
             </div>
           </div>
@@ -166,14 +181,30 @@ const CreateEmployeePage = () => {
             value={department}
             onChange={setDepartment}
           />
-          <button type="submit">Save</button>
+          <button
+            className="form-btn"
+            type="submit"
+            onClick={handleConfirmation}
+          >
+            Save
+          </button>
           {/* <button onClick={ createEmployeeHandler }>Save</button> */}
         </div>
       </form>
       {/* {isError && <div>Error creating employee</div>} */}
       {/* </div> */}
-      <div id="confirmation" className="modal">
-        Employee Created!
+      <div className="link-employee">
+        <Link to="/employees/list">View Current Employees</Link>
+      </div>
+      {/* <button onClick={handleConfirmation}>Show Confirmation Modal</button> */}
+      <div
+        id="confirmation"
+        className={`modal ${showConfirmation ? "active" : ""}`}
+      >
+        <div className="modal-content">
+          <p>Employee Created !</p>
+          <button onClick={closeConfirmation}>X</button>
+        </div>
       </div>
     </div>
   );

@@ -1,12 +1,14 @@
 .employees-header {
   display: flex;
   align-items: center;
+  // justify-content: center;
   flex-direction: column;
   padding-top: 3rem;
 
   .show-search {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
     padding: 1.2rem 0;
 
@@ -18,12 +20,14 @@
 
     .search {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
       font-weight: 600;
       width: 20%;
 
       input {
         width: 100%;
+        padding: 0.3rem;
       }
     }
   }
@@ -104,7 +108,8 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 1.2rem 0;
+  // padding: 1.2rem 0;
+  margin: 1.2rem 0;
 
   .pagination {
     display: flex;
@@ -133,7 +138,7 @@
 
       &:hover {
         background-color: #93ad18;
-        border-color: #93ad18;
+        // border-color: #93ad18;
       }
     }
 
@@ -148,8 +153,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
+  margin: 2rem;
+  border-radius: 0.5rem;
+  
   a {
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     background-color: #5a6f08;
     border-radius: 0.5rem;
     padding: 1rem;
