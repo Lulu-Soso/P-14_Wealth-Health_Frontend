@@ -10,8 +10,22 @@ import {
 import { FaCaretUp, FaCaretDown } from "react-icons/fa6";
 
 const EmployeesListPage = () => {
-  const employeesData = useSelector((state) => state.employees.employees);
+  const employeesData = useSelector((state) => state.employees.employeesData);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/employees");
+        dispatch(setEmployeesData(response.data));
+      } catch (error) {
+        console.error("An error occurred while fetching data:", error);
+        dispatch(setError(error.message));
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   const [sortBy, setSortBy] = useState("firstName");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -40,20 +54,6 @@ const EmployeesListPage = () => {
       setSortOrder("asc");
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/employees");
-        dispatch(setEmployeesData(response.data));
-      } catch (error) {
-        console.error("An error occurred while fetching data:", error);
-        dispatch(setError(error.message));
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);

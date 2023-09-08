@@ -779,18 +779,6 @@
       "zipCode": "43210",
       "department": "Engineering",
       "id": 65
-    },
-    {
-      "firstName": "Baba",
-      "lastName": "Bibi",
-      "birthDate": "2023-08-06",
-      "startDate": "2023-08-04",
-      "street": "ronjean",
-      "city": "blouse",
-      "state": "",
-      "zipCode": "56471",
-      "department": "Human Resources",
-      "id": 66
     }
   ]
 }

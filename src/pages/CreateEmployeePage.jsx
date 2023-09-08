@@ -37,6 +37,18 @@ const CreateEmployeePage = () => {
       department,
     };
 
+    const resetFormFields = () => {
+      setFirstName("");
+      setLastName("");
+      setBirthDate(new Date());
+      setStartDate(new Date());
+      setStreet("");
+      setCity("");
+      setState("");
+      setZipCode("");
+      setDepartment("");
+    };
+
     try {
       console.log("Sending request with data:", data);
       const response = await axios.post(
@@ -45,19 +57,8 @@ const CreateEmployeePage = () => {
       );
       console.log("Response:", response.data);
       dispatch(addEmployee(response.data));
-
-      setFirstName("");
-      setLastName("");
-      setBirthDate("");
-      setStartDate("");
-      setStreet("");
-      setCity("");
-      setState("");
-      setZipCode("");
-      setDepartment("");
-      // Affichez la fenêtre modale de confirmation ici si nécessaire
-
       setShowConfirmation(true); // Affichez la fenêtre modale de confirmation
+      resetFormFields();
     } catch (error) {
       console.error("Error creating employee:", error);
     }

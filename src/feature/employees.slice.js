@@ -1,12 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const safeParse = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || null;
+  } catch (error) {
+    console.warn(`Error parsing ${key} from localStorage:`, error);
+    return null;
+  }
+};
+
+const employeesDataFromLocalStorage = safeParse("employees");
+const employeeInfoFromLocalStorage = safeParse("employeeInfo");
+
 const initialState = {
-  employees: localStorage.getItem("employees")
-    ? JSON.parse(localStorage.getItem("employees"))
-    : [],
-  employeeInfo: localStorage.getItem("employeeInfo")
-    ? JSON.parse(localStorage.getItem("employeeInfo"))
-    : null,
+  employeesData: employeesDataFromLocalStorage || [],
+  employeeInfo: employeeInfoFromLocalStorage || null,
   error: null,
   filteredResults: [],
   searchValue: "",
@@ -23,13 +31,13 @@ const employeesSlice = createSlice({
     // setEmployeesData: (state, action) => {
     setEmployeesData: (state, { payload }) => {
       // state.employees = action.payload;
-      state.employees = payload;
-      localStorage.setItem("employees", JSON.stringify(state.employees));
+      state.employeesData = payload;
+      localStorage.setItem("employees", JSON.stringify(state.employeesData));
     },
     addEmployee: (state, { payload }) => {
-      state.employees.push(payload);
+      state.employeesData.push(payload);
       localStorage.setItem("employeeInfo", JSON.stringify(payload));
-      localStorage.setItem("employees", JSON.stringify(state.employees));
+      localStorage.setItem("employees", JSON.stringify(state.employeesData));
     },
     setError: (state, { payload }) => {
       state.error = payload;
@@ -37,11 +45,28 @@ const employeesSlice = createSlice({
     setEntriesToShow: (state, { payload }) => {
       state.pagination.entriesToShow = payload;
     },
-    setSearch: (state, { payload }) => {
-      state.searchValue = payload;
-    },
+    // setSearch: (state, { payload }) => {
+    //   state.searchValue = payload;
+    // },
     setCurrentPage: (state, { payload }) => {
       state.pagination.currentPage = payload;
+    },
+    filterEmployees: (state) => {
+      if (state.searchValue) {
+        const searchValueLowerCase = state.searchValue.toLowerCase();
+        state.filteredResults = state.employeesData.filter(employee =>
+          Object.values(employee).some(value =>
+            String(value).toLowerCase().includes(searchValueLowerCase)
+          )
+        );
+      } else {
+        state.filteredResults = [];
+      }
+    },
+    setSearch: (state, { payload }) => {
+      state.searchValue = payload;
+      // After setting the search value, we filter the employees
+      employeesSlice.caseReducers.filterEmployees(state);
     },
   },
 });
