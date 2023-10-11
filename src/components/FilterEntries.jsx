@@ -1,5 +1,12 @@
 import React from 'react';
 
+/**
+ * Composant pour filtrer le nombre d'entrées à afficher par page.
+ *
+ * @param {number} entriesToShow - Le nombre d'entrées actuellement affichées par page.
+ * @param {Function} handleEntriesChange - La fonction de gestion du changement du nombre d'entrées.
+ * @returns {JSX.Element} - Le composant de filtre d'entrées.
+ */
 const FilterEntries = ({ entriesToShow, handleEntriesChange }) => {
     return (
         <div className="filter">

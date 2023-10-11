@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { addEmployee } from "../feature/employees.slice";
 
-// const CreateEmployeePage = ({ getEmployees }) => {
+/**
+ * Composant de la page de création d'employé.
+ * @component
+ */
 const CreateEmployeePage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -22,14 +25,26 @@ const CreateEmployeePage = () => {
 
   const dispatch = useDispatch();
 
+  /**
+   * Gère la soumission du formulaire de création d'employé.
+   * @param {Object} e - L'événement de soumission du formulaire.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Convertissez la date de naissance et la date de début en objets Date
+    const birthDateObj = new Date(birthDate);
+    const startDateObj = new Date(startDate);
+
+    // Obtenez les dates formatées en tant que chaînes au format local
+    const formattedBirthDate = birthDateObj.toLocaleDateString("fr-FR");
+    const formattedStartDate = startDateObj.toLocaleDateString("fr-FR");
 
     const data = {
       firstName,
       lastName,
-      birthDate,
-      startDate,
+      birthDate: formattedBirthDate,
+      startDate: formattedStartDate,
       street,
       city,
       state,
@@ -64,6 +79,9 @@ const CreateEmployeePage = () => {
     }
   };
 
+  /**
+   * Gère l'affichage de la fenêtre modale de confirmation.
+   */
   const handleConfirmation = () => {
     setShowConfirmation(true); // Affiche la fenêtre modale
     clearTimeout(confirmationTimer); // Supprime le minuteur précédent
@@ -73,6 +91,9 @@ const CreateEmployeePage = () => {
     setConfirmationTimer(timer); // Stocke le nouveau minuteur
   };
 
+  /**
+   * Ferme la fenêtre modale de confirmation.
+   */
   const closeConfirmation = () => {
     setShowConfirmation(false); // Ferme la fenêtre modale
   };
@@ -87,10 +108,6 @@ const CreateEmployeePage = () => {
 
   return (
     <div className="create-employee">
-      {/* <div className="title">
-        <h1>HRnet</h1>
-      </div>
-      <Link to="/employees/list">View Current Employees</Link> */}
       <h2>Create Employee</h2>
       <form className="form-container" onSubmit={(e) => handleSubmit(e)}>
         <div className="field-row">
@@ -189,15 +206,11 @@ const CreateEmployeePage = () => {
           >
             Save
           </button>
-          {/* <button onClick={ createEmployeeHandler }>Save</button> */}
         </div>
       </form>
-      {/* {isError && <div>Error creating employee</div>} */}
-      {/* </div> */}
       <div className="link-employee">
         <Link to="/employees/list">View Current Employees</Link>
       </div>
-      {/* <button onClick={handleConfirmation}>Show Confirmation Modal</button> */}
       <div
         id="confirmation"
         className={`modal ${showConfirmation ? "active" : ""}`}

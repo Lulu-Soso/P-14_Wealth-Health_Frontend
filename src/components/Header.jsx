@@ -2,6 +2,11 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 
+/**
+ * Composant pour afficher l'en-tête de la page.
+ *
+ * @returns {JSX.Element} - Le composant de l'en-tête.
+ */
 const Header = () => {
   return (
     <header>

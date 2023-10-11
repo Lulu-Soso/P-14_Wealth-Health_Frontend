@@ -45,9 +45,6 @@ const employeesSlice = createSlice({
     setEntriesToShow: (state, { payload }) => {
       state.pagination.entriesToShow = payload;
     },
-    // setSearch: (state, { payload }) => {
-    //   state.searchValue = payload;
-    // },
     setCurrentPage: (state, { payload }) => {
       state.pagination.currentPage = payload;
     },

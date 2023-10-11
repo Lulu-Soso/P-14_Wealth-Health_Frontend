@@ -9,12 +9,16 @@ import {
 } from "../feature/employees.slice";
 import TableHeader from "../components/TableHeader";
 import EmployeeDataRow from "../components/EmployeeDataRow";
-import ShowEntries from "../components/FilterEntries";
+import FilterEntries from "../components/FilterEntries";
 import SearchField from "../components/SearchField";
 import EntriesInfo from "../components/EntriesInfo";
-import Paginate from "../components/Paginate";
+import PaginatedTable from "../components/PaginatedTable";
 
-// *** CONSTANTS ***
+/**
+ * @typedef {Object} Column - Définit une colonne dans la table.
+ * @property {string} key - La clé unique de la colonne.
+ * @property {string} label - Le libellé de la colonne.
+ */
 const columns = [
   { key: "firstName", label: "First Name" },
   { key: "lastName", label: "Last Name" },
@@ -27,8 +31,12 @@ const columns = [
   { key: "department", label: "Department" },
 ];
 
+/**
+ * Composant de la page de liste des employés.
+ * @component
+ */
 const EmployeesListPage = () => {
-  // *** STATES ***
+  // États pour gérer la page
   const [showEmptySearch, setShowEmptySearch] = useState(false);
   const [sortBy, setSortBy] = useState("firstName");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -36,10 +44,13 @@ const EmployeesListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
+  // Sélectionner les données des employés depuis le Redux store
   const employeesData = useSelector((state) => state.employees.employeesData);
   const dispatch = useDispatch();
 
-  // *** DATA FETCHING ***
+  /**
+   * Utilise useEffect pour récupérer les données des employés depuis l'API.
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,11 +65,17 @@ const EmployeesListPage = () => {
     fetchData();
   }, [dispatch]);
 
-  // *** SORTING LOGIC ***
+  /**
+   * Inverse l'ordre de tri actuel.
+   */
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
+  /**
+   * Gère le clic sur l'en-tête de colonne pour changer le tri.
+   * @param {string} columnName - La clé de la colonne sur laquelle l'utilisateur a cliqué.
+   */
   const handleColumnClick = (columnName) => {
     if (sortBy === columnName) {
       toggleSortOrder();
@@ -68,116 +85,131 @@ const EmployeesListPage = () => {
     }
   };
 
+  // Fonction pour trier les données des employés
   const sortedData = employeesData.slice().sort((a, b) => {
     if (sortBy === null) return 0;
 
     const aValue = a[sortBy];
     const bValue = b[sortBy];
 
-    // Check for undefined or null values
     if (aValue == null || bValue == null) return 0;
 
     if (typeof aValue === "string" && typeof bValue === "string") {
-      if (sortOrder === "asc") {
-        return aValue.localeCompare(bValue);
-      } else {
-        return bValue.localeCompare(aValue);
-      }
+      return sortOrder === "asc"
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
     } else {
-      // Handle non-string values, assuming they're numbers or other sortable types
       return sortOrder === "asc" ? aValue - bValue : bValue - aValue;
     }
   });
 
-  // *** PAGINATION LOGIC ***
+  // Calcul du nombre total d'entrées et de pages
   const totalEntries = sortedData.length;
   const totalPages = Math.ceil(totalEntries / entriesToShow);
 
+  /**
+   * Gère le passage à la page précédente.
+   */
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  /**
+   * Gère le passage à la page suivante.
+   */
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  /**
+   * Gère le clic sur une page spécifique pour changer de page.
+   * @param {number} page - Le numéro de page sur lequel l'utilisateur a cliqué.
+   */
   const handlePageClick = (page) => {
     setCurrentPage(page);
   };
 
+  // Fonction pour générer les numéros de page à afficher
   const pageNumbers = getPageNumbers(totalPages, currentPage);
 
+  /**
+   * Génère les numéros de page à afficher.
+   * @param {number} totalPages - Le nombre total de pages.
+   * @param {number} currentPage - La page actuellement affichée.
+   * @param {number} pagesToShow - Le nombre de pages à afficher.
+   * @returns {Array} - Les numéros de page à afficher.
+   */
   function getPageNumbers(totalPages, currentPage, pagesToShow = 5) {
     const halfWay = Math.ceil(pagesToShow / 2);
-
-    // Déterminer les limites de départ et de fin pour la pagination
     let startPage = currentPage - halfWay + 1;
     let endPage = currentPage + halfWay - 1;
 
-    // Si startPage est négatif ou zéro
     if (startPage <= 0) {
       endPage -= startPage - 1;
       startPage = 1;
     }
 
-    // Si endPage dépasse totalPages
     if (endPage > totalPages) {
       endPage = totalPages;
     }
 
-    // Si après avoir fixé endPage, startPage est toujours négatif ou zéro
     if (endPage - pagesToShow + 1 > 0) {
       startPage = endPage - pagesToShow + 1;
     }
 
-    // Générer les numéros de page
     const pages = [];
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
 
-    // Ajouter la première et la dernière page si elles ne sont pas déjà présentes
     if (startPage !== 1) pages.unshift(1);
     if (endPage !== totalPages && totalPages !== 1) pages.push(totalPages);
 
     return pages;
   }
 
-  // *** SEARCH AND FILTER LOGIC ***
+  // Fonction pour filtrer les données des employés en fonction de la recherche
   const paginatedData = sortedData
     .filter((employee) => {
       if (!searchValue) return true;
+      const searchLowerCase = searchValue.toLowerCase();
       return (
-        employee.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.birthDate.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.startDate.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.street.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.city.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.state.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.zipCode.toLowerCase().includes(searchValue.toLowerCase()) ||
-        employee.department.toLowerCase().includes(searchValue.toLowerCase())
+        employee.firstName.toLowerCase().includes(searchLowerCase) ||
+        employee.lastName.toLowerCase().includes(searchLowerCase) ||
+        employee.birthDate.toLowerCase().includes(searchLowerCase) ||
+        employee.startDate.toLowerCase().includes(searchLowerCase) ||
+        employee.street.toLowerCase().includes(searchLowerCase) ||
+        employee.city.toLowerCase().includes(searchLowerCase) ||
+        employee.state.toLowerCase().includes(searchLowerCase) ||
+        employee.zipCode.toLowerCase().includes(searchLowerCase) ||
+        employee.department.toLowerCase().includes(searchLowerCase)
       );
     })
     .slice((currentPage - 1) * entriesToShow, currentPage * entriesToShow);
 
+  /**
+   * Gère le changement de valeur dans le champ de recherche.
+   * @param {Object} e - L'événement de changement de valeur du champ de recherche.
+   */
   const handleSearchChange = (e) => {
     setSearchValue(e.target.value);
-    setCurrentPage(1); // Reset to page 1 on search
+    setCurrentPage(1);
     dispatch(setSearch(e.target.value));
   };
 
+  /**
+ * Gère le changement de valeur dans le champ de recherche.
+ * @param {Object} e - L'événement de changement de valeur du champ de recherche.
+ * @property {string} e.target.value - La valeur actuelle du champ de recherche.
+ */
   const handleEntriesChange = (e) => {
     setEntriesToShow(+e.target.value);
-    setCurrentPage(1); // Reset to page 1 on entries change
+    setCurrentPage(1);
   };
 
+  // Utilise useEffect pour afficher un message si la recherche est vide
   useEffect(() => {
-    if (paginatedData.length === 0) {
-      setShowEmptySearch(true);
-    } else {
-      setShowEmptySearch(false);
-    }
+    setShowEmptySearch(paginatedData.length === 0);
   }, [paginatedData]);
 
   return (
@@ -185,7 +217,7 @@ const EmployeesListPage = () => {
       <div className="employees-header">
         <h2>Current Employees</h2>
         <div className="show-search">
-          <ShowEntries
+          <FilterEntries
             entriesToShow={entriesToShow}
             handleEntriesChange={handleEntriesChange}
           />
@@ -206,7 +238,7 @@ const EmployeesListPage = () => {
                 column={column}
                 sortBy={sortBy}
                 sortOrder={sortOrder}
-                onClick={() => handleColumnClick(column.key)} // Ici, on passe le nom de la colonne
+                onClick={() => handleColumnClick(column.key)}
               />
             ))}
           </tr>
@@ -236,7 +268,7 @@ const EmployeesListPage = () => {
           totalEntries={totalEntries}
         />
 
-        <Paginate
+        <PaginatedTable
           handlePageClick={handlePageClick}
           handlePreviousPage={handlePreviousPage}
           handleNextPage={handleNextPage}
