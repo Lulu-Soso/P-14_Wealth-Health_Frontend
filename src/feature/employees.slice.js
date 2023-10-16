@@ -1,16 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const safeParse = (key) => {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || null;
-  } catch (error) {
-    console.warn(`Error parsing ${key} from localStorage:`, error);
-    return null;
-  }
-};
-
-const employeesDataFromLocalStorage = safeParse("employees");
-const employeeInfoFromLocalStorage = safeParse("employeeInfo");
+// Récupère les données des employés depuis le localStorage
+const employeesDataFromLocalStorage = JSON.parse(localStorage.getItem("employees"))
+const employeeInfoFromLocalStorage = JSON.parse(localStorage.getItem("employeeInfo"))
 
 const initialState = {
   employeesData: employeesDataFromLocalStorage || [],
