@@ -20,7 +20,7 @@ const TableHeader = ({ column, sortBy, sortOrder, onClick }) => {
             className={`${sortBy === column.key ? "sorted-column" : ""}`}
         >
             <p className="flex-jcc-aic">
-                {column.label} {/* This line is changed */}
+                {column.label} {/* Cette ligne a été modifiée. */}
                 <span className="up-down">
                     <FaCaretUp
                         className={

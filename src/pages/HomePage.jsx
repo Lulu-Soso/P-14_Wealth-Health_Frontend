@@ -8,12 +8,12 @@ import { Link } from 'react-router-dom'
  */
 const HomePage = () => {
   return (
-    <>
+    <div className='welcome-home'>
     <h1>Welcome to Wealth Health !</h1>
     <Link to="/employees/create">
-      Create employees
+      Create employee
     </Link>
-    </>
+    </div>
   )
 }
 

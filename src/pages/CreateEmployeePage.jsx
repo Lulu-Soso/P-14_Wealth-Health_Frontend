@@ -22,6 +22,7 @@ const CreateEmployeePage = () => {
   const [department, setDepartment] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationTimer, setConfirmationTimer] = useState(null);
+  const [showError, setShowError] = useState(false); // État pour gérer l'affichage de l'erreur
 
   const dispatch = useDispatch();
 
@@ -32,11 +33,34 @@ const CreateEmployeePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Convertissez la date de naissance et la date de début en objets Date
+    // Validation du formulaire (exemple : vérifiez si le prénom est vide)
+    if (
+      firstName.trim() === "" ||
+      lastName.trim() === "" ||
+      birthDate === "" ||
+      startDate === "" ||
+      street.trim() === "" ||
+      city.trim() === "" ||
+      state === "" ||
+      zipCode.trim() === "" ||
+      department === ""
+    ) {
+      setShowError(true); // Affiche la div d'erreur
+
+      // Masque le message d'erreur après 3 secondes (3000 millisecondes)
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+
+      setShowConfirmation(false); // Masque la fenêtre modale de confirmation
+      return; // Arrête la soumission du formulaire
+    }
+
+    // Convertit la date de naissance et la date de début en objets Date
     const birthDateObj = new Date(birthDate);
     const startDateObj = new Date(startDate);
 
-    // Obtenez les dates formatées en tant que chaînes au format local
+    // Obtient les dates formatées en tant que chaînes au format local
     const formattedBirthDate = birthDateObj.toLocaleDateString("fr-FR");
     const formattedStartDate = startDateObj.toLocaleDateString("fr-FR");
 
@@ -72,7 +96,7 @@ const CreateEmployeePage = () => {
       );
       console.log("Response:", response.data);
       dispatch(addEmployee(response.data));
-      setShowConfirmation(true); // Affichez la fenêtre modale de confirmation
+      setShowConfirmation(true); // Affiche la fenêtre modale de confirmation
       resetFormFields();
     } catch (error) {
       console.error("Error creating employee:", error);
@@ -98,6 +122,15 @@ const CreateEmployeePage = () => {
     setShowConfirmation(false); // Ferme la fenêtre modale
   };
 
+  // Tableau d'options pour les États
+  const stateOptions = [
+    { value: "CA", label: "California" },
+    { value: "WA", label: "Washington" },
+    { value: "NC", label: "North Carolina" },
+    { value: "MI", label: "Michigan" },
+    { value: "NY", label: "New York" },
+  ];
+
   const departmentOptions = [
     { value: "Sales", label: "Sales" },
     { value: "Marketing", label: "Marketing" },
@@ -109,6 +142,14 @@ const CreateEmployeePage = () => {
   return (
     <div className="create-employee">
       <h2>Create Employee</h2>
+
+      {/* Div d'erreur */}
+      {showError && (
+        <div className="right-error-message">
+          <p>All fields are mandatory.</p>
+        </div>
+      )}
+
       <form className="form-container" onSubmit={(e) => handleSubmit(e)}>
         <div className="field-row">
           <div className="field">
@@ -166,19 +207,12 @@ const CreateEmployeePage = () => {
           </div>
           <div>
             <div className="field-row">
-              <div className="field">
-                <label htmlFor="state">State</label>
-                <select
-                  name="state"
-                  id="state"
+                <DropdownForm
+                  label="state"
+                  options={stateOptions}
                   value={state}
-                  onChange={(e) => setState(e.target.value)}
-                >
-                  <option value="">Select State</option>
-                  <option value="CA">California</option>
-                  {/* Ajoutez d'autres options d'état ici */}
-                </select>
-              </div>
+                  onChange={setState}
+                />
               <div className="field">
                 <label htmlFor="zip-code">Zip Code</label>
                 <input
