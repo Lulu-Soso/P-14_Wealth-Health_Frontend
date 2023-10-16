@@ -18,10 +18,6 @@ const initialState = {
   error: null,
   filteredResults: [],
   searchValue: "",
-  pagination: {
-    currentPage: 1,
-    entriesToShow: 10,
-  },
 };
 
 const employeesSlice = createSlice({
@@ -45,26 +41,25 @@ const employeesSlice = createSlice({
     setEntriesToShow: (state, { payload }) => {
       state.pagination.entriesToShow = payload;
     },
-    setCurrentPage: (state, { payload }) => {
-      state.pagination.currentPage = payload;
-    },
-    filterEmployees: (state) => {
+    setSearch: (state, { payload }) => {
+      // Définit la valeur de recherche dans le state
+      state.searchValue = payload;
+      // Si une valeur de recherche est définie
       if (state.searchValue) {
+        // Convertit la valeur de recherche en minuscules
         const searchValueLowerCase = state.searchValue.toLowerCase();
+        // Filtre les résultats en fonction de la valeur de recherche
         state.filteredResults = state.employeesData.filter(employee =>
+          // Vérifie si l'une des valeurs de l'employé contient la valeur de recherche
           Object.values(employee).some(value =>
             String(value).toLowerCase().includes(searchValueLowerCase)
           )
         );
       } else {
+        // Si aucune valeur de recherche n'est définie, réinitialise les résultats filtrés
         state.filteredResults = [];
       }
-    },
-    setSearch: (state, { payload }) => {
-      state.searchValue = payload;
-      // After setting the search value, we filter the employees
-      employeesSlice.caseReducers.filterEmployees(state);
-    },
+    }, 
   },
 });
 
@@ -72,7 +67,6 @@ export const {
   setEmployeesData,
   addEmployee,
   setError,
-  setCurrentPage,
   setEntriesToShow,
   setSearch,
 } = employeesSlice.actions;

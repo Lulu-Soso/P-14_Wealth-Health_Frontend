@@ -191,66 +191,6 @@
       "state": "Washington",
       "zipCode": "56743",
       "department": "Quality Assurance"
-    },
-    {
-      "firstName": "cc",
-      "lastName": "cc",
-      "birthDate": "03/10/2023",
-      "startDate": "25/09/2023",
-      "street": "cc",
-      "city": "cc",
-      "state": "CA",
-      "zipCode": "2",
-      "department": "Marketing",
-      "id": 17
-    },
-    {
-      "firstName": "qq",
-      "lastName": "qq",
-      "birthDate": "26/09/2023",
-      "startDate": "29/09/2023",
-      "street": "qq",
-      "city": "qq",
-      "state": "CA",
-      "zipCode": "0",
-      "department": "Marketing",
-      "id": 18
-    },
-    {
-      "firstName": "gg",
-      "lastName": "gg",
-      "birthDate": "05/10/2023",
-      "startDate": "07/10/2023",
-      "street": "gg",
-      "city": "gg",
-      "state": "CA",
-      "zipCode": "2",
-      "department": "Engineering",
-      "id": 19
-    },
-    {
-      "firstName": "pp",
-      "lastName": "pp",
-      "birthDate": "26/09/2023",
-      "startDate": "28/09/2023",
-      "street": "pp",
-      "city": "pp",
-      "state": "CA",
-      "zipCode": "2",
-      "department": "Marketing",
-      "id": 20
-    },
-    {
-      "firstName": "ggg",
-      "lastName": "ggg",
-      "birthDate": "28/09/2023",
-      "startDate": "30/09/2023",
-      "street": "gggg",
-      "city": "gggg",
-      "state": "CA",
-      "zipCode": "2",
-      "department": "Marketing",
-      "id": 21
     }
   ]
 }

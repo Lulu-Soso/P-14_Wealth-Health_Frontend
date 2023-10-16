@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { addEmployee, setError } from "../feature/employees.slice";
+import { useDispatch } from "react-redux";
 import DropdownForm from "../components/DropdownForm";
 import DateSelector from "../components/DateSelector";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import { addEmployee } from "../feature/employees.slice";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 /**
  * Composant de la page de création d'employé.
@@ -20,9 +21,8 @@ const CreateEmployeePage = () => {
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [department, setDepartment] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [confirmationTimer, setConfirmationTimer] = useState(null);
-  const [showError, setShowError] = useState(false); // État pour gérer l'affichage de l'erreur
+  const [showModalConfirmation, setShowModalConfirmation] = useState(false);
+  const [showEmptyFieldsMessage, setShowEmptyFieldsMessage] = useState(false); // État pour gérer l'affichage de l'erreur
 
   const dispatch = useDispatch();
 
@@ -45,14 +45,15 @@ const CreateEmployeePage = () => {
       zipCode.trim() === "" ||
       department === ""
     ) {
-      setShowError(true); // Affiche la div d'erreur
-
+      setShowEmptyFieldsMessage(true); // Affiche la div d'erreur
+      // Utilise l'action setError pour enregistrer l'erreur dans le store Redux
+      dispatch(setError("All fields are mandatory."));
       // Masque le message d'erreur après 3 secondes (3000 millisecondes)
       setTimeout(() => {
-        setShowError(false);
+        setShowEmptyFieldsMessage(false);
       }, 3000);
 
-      setShowConfirmation(false); // Masque la fenêtre modale de confirmation
+      setShowModalConfirmation(false); // Masque la fenêtre modale de confirmation
       return; // Arrête la soumission du formulaire
     }
 
@@ -94,10 +95,12 @@ const CreateEmployeePage = () => {
         "http://localhost:5000/employees",
         data
       );
-      console.log("Response:", response.data);
+      // console.log("Response:", response.data);
       dispatch(addEmployee(response.data));
-      setShowConfirmation(true); // Affiche la fenêtre modale de confirmation
+      setShowModalConfirmation(true); // Affiche la fenêtre modale de confirmation
       resetFormFields();
+      // Réinitialise l'erreur dans le store Redux si nécessaire
+      dispatch(setError(null));
     } catch (error) {
       console.error("Error creating employee:", error);
     }
@@ -107,19 +110,11 @@ const CreateEmployeePage = () => {
    * Gère l'affichage de la fenêtre modale de confirmation.
    */
   const handleConfirmation = () => {
-    setShowConfirmation(true); // Affiche la fenêtre modale
-    clearTimeout(confirmationTimer); // Supprime le minuteur précédent
-    const timer = setTimeout(() => {
-      setShowConfirmation(false); // Ferme la fenêtre modale après un certain temps
-    }, 3000); // 3000 millisecondes (3 secondes)
-    setConfirmationTimer(timer); // Stocke le nouveau minuteur
-  };
-
-  /**
-   * Ferme la fenêtre modale de confirmation.
-   */
-  const closeConfirmation = () => {
-    setShowConfirmation(false); // Ferme la fenêtre modale
+    setShowModalConfirmation(true); // Affiche la fenêtre modale
+    // Masque le message d'erreur après 3 secondes (3000 millisecondes)
+    setTimeout(() => {
+      setShowModalConfirmation(false); // Ferme la fenêtre modale après un certain temps
+    }, 3000);
   };
 
   // Tableau d'options pour les États
@@ -144,7 +139,7 @@ const CreateEmployeePage = () => {
       <h2>Create Employee</h2>
 
       {/* Div d'erreur */}
-      {showError && (
+      {showEmptyFieldsMessage && (
         <div className="right-error-message">
           <p>All fields are mandatory.</p>
         </div>
@@ -207,12 +202,12 @@ const CreateEmployeePage = () => {
           </div>
           <div>
             <div className="field-row">
-                <DropdownForm
-                  label="state"
-                  options={stateOptions}
-                  value={state}
-                  onChange={setState}
-                />
+              <DropdownForm
+                label="state"
+                options={stateOptions}
+                value={state}
+                onChange={setState}
+              />
               <div className="field">
                 <label htmlFor="zip-code">Zip Code</label>
                 <input
@@ -245,15 +240,11 @@ const CreateEmployeePage = () => {
       <div className="link-employee">
         <Link to="/employees/list">View Current Employees</Link>
       </div>
-      <div
-        id="confirmation"
-        className={`modal ${showConfirmation ? "active" : ""}`}
-      >
-        <div className="modal-content">
-          <p>Employee Created !</p>
-          <button onClick={closeConfirmation}>X</button>
-        </div>
-      </div>
+      <ConfirmationModal
+        isOpen={showModalConfirmation}
+        message="Employee Created !"
+        onClose={() => setShowModalConfirmation(false)}
+      />
     </div>
   );
 };
