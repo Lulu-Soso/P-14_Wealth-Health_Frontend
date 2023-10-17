@@ -12,6 +12,7 @@ const FilterEntries = ({ entriesToShow, handleEntriesChange }) => {
         <div className="filter">
             <label htmlFor="show">Show</label>
             <select
+                className="filter-select"
                 name="state"
                 id="show"
                 value={entriesToShow}

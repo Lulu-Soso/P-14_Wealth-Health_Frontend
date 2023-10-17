@@ -1,9 +1,12 @@
 .employees-header {
   display: flex;
   align-items: center;
-  // justify-content: center;
   flex-direction: column;
   padding-top: 3rem;
+
+  h2 {
+    cursor: default;
+  }
 
   .show-search {
     display: flex;
@@ -16,6 +19,14 @@
       display: flex;
       gap: 0.5rem;
       font-weight: 600;
+
+      .filter-select {
+        cursor: pointer;
+      }
+
+      p {
+        cursor: default;
+      }
     }
 
     .search {
@@ -118,6 +129,10 @@
   align-items: center;
   margin: 1.2rem 0;
 
+  .entries-info {
+    cursor: default;
+  }
+
   .pagination {
     display: flex;
     align-items: center;
@@ -162,7 +177,7 @@
   align-items: center;
   margin: 2rem;
   border-radius: 0.5rem;
-  
+
   a {
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     background-color: #5a6f08;

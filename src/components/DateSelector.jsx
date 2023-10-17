@@ -13,6 +13,7 @@ const DateSelector = ({ label, value, onChange }) => {
     <div className="field">
       <label htmlFor={label.toLowerCase()}>{label}</label>
       <input
+        className="date-selector"
         type="date"
         id={label.toLowerCase()}
         value={value}

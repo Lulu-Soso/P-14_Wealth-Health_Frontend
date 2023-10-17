@@ -169,30 +169,29 @@ const EmployeesListPage = () => {
   }
 
   // Fonction pour filtrer les données des employés en fonction de la recherche
-const paginatedData = sortedData
-.filter((employee) => {
-  // Vérifie si la valeur de recherche est vide
-  if (!searchValue) return true;
+  const paginatedData = sortedData
+    .filter((employee) => {
+      // Vérifie si la valeur de recherche est vide
+      if (!searchValue) return true;
 
-  // Convertit la valeur de recherche en minuscules pour une recherche insensible à la casse
-  const searchLowerCase = searchValue.toLowerCase();
+      // Convertit la valeur de recherche en minuscules pour une recherche insensible à la casse
+      const searchLowerCase = searchValue.toLowerCase();
 
-  // Vérifie si l'employé actuel correspond à la recherche dans plusieurs champs
-  return (
-    employee.firstName.toLowerCase().includes(searchLowerCase) || // Vérifie le prénom
-    employee.lastName.toLowerCase().includes(searchLowerCase) ||
-    employee.birthDate.toLowerCase().includes(searchLowerCase) ||
-    employee.startDate.toLowerCase().includes(searchLowerCase) || 
-    employee.street.toLowerCase().includes(searchLowerCase) ||
-    employee.city.toLowerCase().includes(searchLowerCase) || 
-    employee.state.toLowerCase().includes(searchLowerCase) || 
-    employee.zipCode.toLowerCase().includes(searchLowerCase) ||
-    employee.department.toLowerCase().includes(searchLowerCase)
-  );
-})
-// Effectue une pagination en tranchant les données filtrées en fonction de la page actuelle et du nombre d'entrées à afficher par page
-.slice((currentPage - 1) * entriesToShow, currentPage * entriesToShow);
-
+      // Vérifie si l'employé actuel correspond à la recherche dans plusieurs champs
+      return (
+        employee.firstName.toLowerCase().includes(searchLowerCase) || // Vérifie le prénom
+        employee.lastName.toLowerCase().includes(searchLowerCase) ||
+        employee.birthDate.toLowerCase().includes(searchLowerCase) ||
+        employee.startDate.toLowerCase().includes(searchLowerCase) ||
+        employee.street.toLowerCase().includes(searchLowerCase) ||
+        employee.city.toLowerCase().includes(searchLowerCase) ||
+        employee.state.toLowerCase().includes(searchLowerCase) ||
+        employee.zipCode.toLowerCase().includes(searchLowerCase) ||
+        employee.department.toLowerCase().includes(searchLowerCase)
+      );
+    })
+    // Effectue une pagination en tranchant les données filtrées en fonction de la page actuelle et du nombre d'entrées à afficher par page
+    .slice((currentPage - 1) * entriesToShow, currentPage * entriesToShow);
 
   /**
    * Gère le changement de valeur dans le champ de recherche.
@@ -205,10 +204,10 @@ const paginatedData = sortedData
   };
 
   /**
- * Gère le changement de valeur dans le champ de recherche.
- * @param {Object} e - L'événement de changement de valeur du champ de recherche.
- * @property {string} e.target.value - La valeur actuelle du champ de recherche.
- */
+   * Gère le changement de valeur dans le champ de recherche.
+   * @param {Object} e - L'événement de changement de valeur du champ de recherche.
+   * @property {string} e.target.value - La valeur actuelle du champ de recherche.
+   */
   const handleEntriesChange = (e) => {
     // Convertir la valeur du champ de recherche en nombre et la définir comme nouvelle valeur pour 'entriesToShow'
     setEntriesToShow(+e.target.value); // L'utilisation de + avant e.target.value convertit cette valeur en nombre
