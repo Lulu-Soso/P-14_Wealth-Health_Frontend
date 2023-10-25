@@ -13,6 +13,8 @@ import FilterEntries from "../components/FilterEntries";
 import SearchField from "../components/SearchField";
 import EntriesInfo from "../components/EntriesInfo";
 import PaginatedTable from "../components/PaginatedTable";
+import { formatLocalDate } from "../utils/formatLocalDate";
+
 
 /**
  * @typedef {Object} Column - Définit une colonne dans la table.
@@ -179,15 +181,16 @@ const EmployeesListPage = () => {
 
       // Vérifie si l'employé actuel correspond à la recherche dans plusieurs champs
       return (
-        employee.firstName.toLowerCase().includes(searchLowerCase) || // Vérifie le prénom
-        employee.lastName.toLowerCase().includes(searchLowerCase) ||
-        employee.birthDate.toLowerCase().includes(searchLowerCase) ||
-        employee.startDate.toLowerCase().includes(searchLowerCase) ||
-        employee.street.toLowerCase().includes(searchLowerCase) ||
-        employee.city.toLowerCase().includes(searchLowerCase) ||
-        employee.state.toLowerCase().includes(searchLowerCase) ||
-        employee.zipCode.toLowerCase().includes(searchLowerCase) ||
-        employee.department.toLowerCase().includes(searchLowerCase)
+        // opérateur de coalescence nulle (??), nous attribuons une chaîne vide "" à chaque champ de l'objet employee s'il est null ou undefined, puis nous appliquons toLowerCase() sur chaque champ en toute sécurité sans risquer de provoquer une erreur "Cannot read properties of undefined".
+        (employee.firstName ?? "").toLowerCase().includes(searchLowerCase) || // Vérifie le prénom
+        (employee.lastName ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.birthDate ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.startDate ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.street ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.city ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.state ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.zipCode ?? "").toLowerCase().includes(searchLowerCase) ||
+        (employee.department ?? "").toLowerCase().includes(searchLowerCase)
       );
     })
     // Effectue une pagination en tranchant les données filtrées en fonction de la page actuelle et du nombre d'entrées à afficher par page
@@ -220,7 +223,7 @@ const EmployeesListPage = () => {
   }, [paginatedData]);
 
   return (
-    <div className="app-container">
+    <>
       <div className="employees-header">
         <h2>Current Employees</h2>
         <div className="show-search">
@@ -235,32 +238,34 @@ const EmployeesListPage = () => {
           />
         </div>
       </div>
-
-      <table className="employees-table">
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <TableHeader
-                key={column.key}
-                column={column}
+      <div className="table-container">
+        <table className="employees-table">
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <TableHeader
+                  key={column.key}
+                  column={column}
+                  sortBy={sortBy}
+                  sortOrder={sortOrder}
+                  onClick={() => handleColumnClick(column.key)}
+                />
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedData.map((employee, index) => (
+              <EmployeeDataRow
+                key={employee.id}
+                employee={employee}
                 sortBy={sortBy}
-                sortOrder={sortOrder}
-                onClick={() => handleColumnClick(column.key)}
+                className={index % 2 === 0 ? "table-row-odd" : "table-row-even"}
+                formatLocalDate={formatLocalDate} // Passe la fonction de formatage de date
               />
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.map((employee, index) => (
-            <EmployeeDataRow
-              key={employee.id}
-              employee={employee}
-              sortBy={sortBy}
-              className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
-            />
-          ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
       {showEmptySearch && (
         <div className="error-message">
@@ -286,7 +291,7 @@ const EmployeesListPage = () => {
       <div className="link-employee">
         <Link to="/employees/create">Create Employee</Link>
       </div>
-    </div>
+    </>
   );
 };
 

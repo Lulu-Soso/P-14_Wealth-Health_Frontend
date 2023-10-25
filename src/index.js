@@ -14,6 +14,8 @@ import reportWebVitals from "./reportWebVitals";
 import HomePage from "./pages/HomePage";
 import EmployeesListPage from "./pages/EmployeesListPage";
 import CreateEmployeePage from "./pages/CreateEmployeePage"
+// import AppTestLibrary from "./examples/AppTestLibrary";
+import LibraryPage from "./pages/LibraryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +23,7 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<HomePage />} />
       <Route path="/employees/create" element={<CreateEmployeePage />} />
       <Route path="/employees/list" element={<EmployeesListPage />} />
+      <Route path="/library" element={<LibraryPage />} />
     </Route>
   )
 );
