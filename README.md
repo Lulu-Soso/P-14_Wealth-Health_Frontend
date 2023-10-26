@@ -11,6 +11,16 @@ Pour commencer le projet, suivez les étapes suivantes :
 npm install
 ```
 
+## Execution du Serveur et de l'application Front-end
+Pour exécuter le serveur JSON Server, utilisez la commande suivante :
+```shell
+npm run server
+```
+Pour lancer l'application front-end, exécutez la commande suivante :
+```shell
+npm start
+```
+
 ## Plugins jQuery à Convertir
 
 ### 1. Sélecteurs de Date
@@ -53,7 +63,7 @@ npm i supertable-react-javascript
 import SuperTable from "supertable-react-javascript";
 ```
 
-3. **Personnalisation** : Pour personnaliser SuperTableReact, veuillez consulter la documentation de personnalisation pour plus de détails.
+3. **Personnalisation** : Pour personnaliser le composant SuperTable, veuillez consulter la documentation de personnalisation pour plus de détails.
 
 ```shell
 https://www.npmjs.com/package/supertable-react-javascript
